@@ -3,11 +3,14 @@
 #include <string>
 #include <vector>
 #include <numeric>
+#include <chrono>
 
-int main() {
-    std::ifstream inputFile("../../data/20221201-calories-per-elf.txt");
+std::string file = "../../data/20221201-calories-per-elf.txt";
+
+int version1() {
+    std::ifstream inputFile(file);
     if (!inputFile) {
-        std::cerr << "Unable to open file example.txt" << std::endl;
+        std::cerr << "Unable to open file: " << file << std::endl;
         return 1;
     }
 
@@ -36,13 +39,62 @@ int main() {
         int sum = std::accumulate(elves[i].begin(), elves[i].end(), 0);
 
         elvesTotalCalories.push_back(sum);
-
-        std::cout << "Elf total calories: " << std::to_string(sum) << std::endl;
     }
 
     int maxCalories = *std::max_element(elvesTotalCalories.begin(), elvesTotalCalories.end());
 
     std::cout << "Elf max calories: " << maxCalories << std::endl;
 
+    return 0;
+}
+
+int version2() {
+    std::ifstream inputFile(file);
+    if (!inputFile) {
+        std::cerr << "Unable to open file: " << file << std::endl;
+        return 1;
+    }
+
+    std::vector<int> elves;
+    int currentElf = 0;
+    std::string line;
+    while (getline(inputFile, line)) {
+        // each elf is a group of numbers over multiple lines; each elf separated by an empty line
+        // we want to calculate the sum of each elf and then find the max sum
+        if (line.empty()) {
+            elves.push_back(currentElf);
+            currentElf = 0;
+        } else {
+            currentElf += std::stoi(line);
+        }
+    }
+
+    int maxCalories = *std::max_element(elves.begin(), elves.end());
+    std::cout << "Elf max calories: " << maxCalories << std::endl;
+
+    return 0;
+}
+
+void benchmark(const std::vector<std::function<int()>>& functions, int num_runs) {
+    for (size_t i = 0; i < functions.size(); ++i) {
+        auto& func = functions[i];
+        std::chrono::duration<double> total_time(0);
+
+        for (size_t j = 0; j < num_runs; ++j) {
+            auto start_time = std::chrono::high_resolution_clock::now();
+            func();
+            auto end_time = std::chrono::high_resolution_clock::now();
+            total_time += end_time - start_time;
+        }
+
+        double average_time = total_time.count() / num_runs;
+        std::cout << "Function " << i + 1 << " average time: " << average_time << " seconds" << std::endl;
+    }
+}
+
+int main() {
+    std::vector<std::function<int()>> functions = {version1, version2};
+    int num_runs = 5;
+    benchmark(functions, num_runs);
     return 0;
 }

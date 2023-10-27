@@ -1,5 +1,9 @@
 .DS_Store
 
+# ignore clion
+.idea/
+cmake-build-debug/
+
 # -- Cpp --
 # Prerequisites
 *.d

@@ -43,7 +43,7 @@ int version1() {
 
     int maxCalories = *std::max_element(elvesTotalCalories.begin(), elvesTotalCalories.end());
 
-    std::cout << "Elf max calories: " << maxCalories << std::endl;
+    // std::cout << "Elf max calories: " << maxCalories << std::endl;
 
     return 0;
 }
@@ -70,21 +70,25 @@ int version2() {
     }
 
     int maxCalories = *std::max_element(elves.begin(), elves.end());
-    std::cout << "Elf max calories: " << maxCalories << std::endl;
+    // std::cout << "Elf max calories: " << maxCalories << std::endl;
 
     return 0;
 }
 
 void benchmark(const std::vector<std::function<int()>>& functions, int num_runs) {
-    for (size_t i = 0; i < functions.size(); ++i) {
+    for (int i = 0; i < functions.size(); ++i) {
         auto& func = functions[i];
-        std::chrono::duration<double> total_time(0);
+        std::chrono::duration<double> total_time(0.0);
 
-        for (size_t j = 0; j < num_runs; ++j) {
+        for (int j = 0; j < num_runs; ++j) {
             auto start_time = std::chrono::high_resolution_clock::now();
             func();
             auto end_time = std::chrono::high_resolution_clock::now();
             total_time += end_time - start_time;
+
+            auto current_run_time = end_time - start_time;
+
+            std::cout << "This run took: " << current_run_time.count() << " seconds" << std::endl;
         }
 
         double average_time = total_time.count() / num_runs;
@@ -94,7 +98,7 @@ void benchmark(const std::vector<std::function<int()>>& functions, int num_runs)
 
 int main() {
     std::vector<std::function<int()>> functions = {version1, version2};
-    int num_runs = 5;
+    int num_runs = 20;
     benchmark(functions, num_runs);
     return 0;
 }

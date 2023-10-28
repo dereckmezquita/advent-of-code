@@ -19,10 +19,16 @@ std::map<std::string, int> mapping = {
     {"C", 2}, {"Z", 2}
 };
 
+std::map<std::string, int> shapeMapping = {
+    {"X", 1},
+    {"Y", 2},
+    {"Z", 3}
+};
+
 int resultMatrix[3][3] = {
-    {0, -1, 1},
-    {1, 0, -1},
-    {-1, 1, 0}
+    {3, 0, 6},
+    {6, 3, 0},
+    {0, 6, 3}
 };
 
 std::string getHumanReadable(int move) {
@@ -62,7 +68,10 @@ int version1() {
             int v1 = mapping[p1];
             int v2 = mapping[p2];
             int result = getScore(v2, v1);
-            totalScore += result;
+
+            int shapeScore = shapeMapping[p2];
+
+            totalScore += result + shapeScore;
             std::cout <<
                 "Opp: " << getHumanReadable(v1) << std::endl <<
                 "Me:  " << getHumanReadable(v2) << std::endl <<

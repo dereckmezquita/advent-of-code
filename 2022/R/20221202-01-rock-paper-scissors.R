@@ -1,3 +1,4 @@
+library("data.table")
 box::use(data.table)
 
 dt <- data.table$fread("./2022/data/20221202-rock-paper-scissors.txt", col.names = c("opp", "me"))
@@ -8,9 +9,20 @@ mapping = list(
     C = 2, Z = 2
 )
 
-dt[, opp := unlist(mapping[opp])]
-dt[, me := unlist(mapping[me])]
+shapeMapping = list(
+    X = 1,
+    Y = 2,
+    Z = 3
+)
 
-dt[, result := me - opp]
+getResult <- function(v1, v2) {
+    resultMatrix = list(
+        list(3, 0, 6),
+        list(6, 3, 0),
+        list(0, 6, 3)
+    )
+}
 
-sum(dt$result)
+dt[,
+    score := getResult(unlist(mapping[me]), unlist(shapeMapping[opp])) + unlist(shapeMapping[me])
+]

@@ -3,4 +3,4 @@ project(cpp)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(cpp 20221201-elf-calories.cpp)
+add_executable(cpp main.cpp headers/ modules/benchmark.cpp modules/benchmark.h)

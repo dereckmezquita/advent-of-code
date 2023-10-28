@@ -15,7 +15,6 @@ std::string file = "../../data/20221202-rock-paper-scissors.txt";
 // A, X - ROCK
 // B, Y - PAPER
 // C, Z - SCISSORS
-
 std::map<std::string, int> mapping = {
         {"A", 0}, {"X", 0},
         {"B", 1}, {"Y", 1},
@@ -34,25 +33,12 @@ int resultMatrix[3][3] = {
         {0, 6, 3}
 };
 
-std::string getHumanReadable(int move) {
-    switch (move) {
-        case 0:
-            return "ROCK";
-        case 1:
-            return "PAPER";
-        case 2:
-            return "SCISSORS";
-        default:
-            return "INVALID";
-    }
-}
-
 int getScore(int move1, int move2) {
     return resultMatrix[move1][move2];
 }
 
 namespace d2p1 {
-    void hello() {
+    void run() {
         std::ifstream inputFile(file);
         if (!inputFile) {
             std::cerr << "Unable to open file: " << file << std::endl;
@@ -76,10 +62,6 @@ namespace d2p1 {
                 int shapeScore = shapeMapping[p2];
 
                 totalScore += result + shapeScore;
-                std::cout <<
-                          "Opp: " << getHumanReadable(v1) << std::endl <<
-                          "Me:  " << getHumanReadable(v2) << std::endl <<
-                          "Result: " << result << std::endl << std::endl;
             }
         }
 

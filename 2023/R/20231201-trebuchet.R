@@ -1,31 +1,23 @@
-box::use(data.table)
-
-dt <- data.table$fread("./2023/data/20231201-trebuchet.txt", header = FALSE)
-
-getNum <- function(val) {
-    indices <- gregexpr("[0-9]", val)
-
-    return(sapply(seq_along(indices), function(i) {
-        idx <- indices[[i]]
-        cur_val <- val[i]
-
-        bol <- substr(cur_val, idx, idx)
-        eol <- substr(cur_val, idx[length(idx)], idx[length(idx)])
-        return(as.numeric(paste0(bol, eol)))
-    }))
-}
+con <- file("./2023/data/20231201-trebuchet.txt", "r")
 
 main <- function() {
-    dt[, score := getNum(V1)]
-    sum(dt$score)   
+    sum <- 0
+    while (TRUE) {
+        line <- readLines(con, n = 1)
+        if (length(line) == 0) break
+
+        indices <- gregexpr("[0-9]", line)[[1]]
+
+        last_idx <- indices[length(indices)]
+        bol <- substr(line, indices, indices)
+        eol <- substr(line, last_idx, last_idx)
+        sum <- sum + as.numeric(paste0(bol, eol))
+    }
+    print(sum)
 }
 
-res <- microbenchmark::microbenchmark(
+options(scipen = 999)
+print(microbenchmark::microbenchmark(
     main(),
-    times = 10
-)
-
-
-ggplot2::autoplot(res)
-
-print(res, unit = "s")
+    times = 1
+), unit = "s")

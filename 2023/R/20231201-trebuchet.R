@@ -1,23 +1,24 @@
 con <- file("./2023/data/20231201-trebuchet.txt", "r")
 
-main <- function() {
-    sum <- 0
-    while (TRUE) {
-        line <- readLines(con, n = 1)
-        if (length(line) == 0) break
+lines <- readLines(con)
+close(con)
 
-        indices <- gregexpr("[0-9]", line)[[1]]
+process_lines <- function(lines) {
+    # Extract numbers and convert to numeric
+    numbers <- as.numeric(gsub("[^0-9]", "", lines))
 
-        last_idx <- indices[length(indices)]
-        bol <- substr(line, indices, indices)
-        eol <- substr(line, last_idx, last_idx)
-        sum <- sum + as.numeric(paste0(bol, eol))
-    }
-    print(sum)
+    # get the first and last digit of each number
+    first_digit <- floor(numbers / 10 ^ (nchar(numbers) - 1))
+    last_digit <- numbers %% 10
+
+    num <- paste0(first_digit, last_digit)
+    
+    # Process and sum the numbers
+    print(sum(as.numeric(num)))
 }
 
 options(scipen = 999)
 print(microbenchmark::microbenchmark(
-    main(),
-    times = 1
+    process_lines(lines),
+    times = 10
 ), unit = "s")

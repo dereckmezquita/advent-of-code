@@ -1,25 +1,23 @@
 #!/usr/bin/env python3
+from typing import List
 import time
 
 file: str = "./2023/data/20231201-trebuchet.txt"
 
 def main():
-    sum = 0
+    sum: int = 0
 
     with open(file, "r") as f:
         for line in f:
+            digits: List[int] = []
 
-            true_idx = []
-            for idx, val in enumerate(line):
-                val = val.isdigit()
-                if val:
-                    true_idx.append(idx)
+            for char in line:
+                if char.isdigit():
+                    digits.append(char)
 
-            min_val = line[min(true_idx)]
-            max_val = line[max(true_idx)]
+            if len(digits) > 0:
+                sum += int(digits[0] + digits[-1])
 
-            sum += int(min_val + max_val)
-            
     print(sum)
 
 # Number of iterations

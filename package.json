@@ -1,0 +1,13 @@
+{
+  "name": "advent-of-code",
+  "version": "1.0.0",
+  "description": "My solutions for the advent of code events hosted by: [adventofcode.com](https://adventofcode.com)",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dereck Mezquita",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.10.6"
+  }
+}
